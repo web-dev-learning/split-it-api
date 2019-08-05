@@ -1,14 +1,12 @@
 const dotenv = require("dotenv");
-const express = require("express");
-const mysql = require("mysql");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const chalk = require("chalk");
-
 // Load environment variables from .env file, where API keys and passwords are configured.
 dotenv.config({path: ".env"});
 
-const db = mysql.createConnection(process.env.DB_CONNECTION_STRING);
+const db = require("./utils/db");
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const chalk = require("chalk");
 
 db.connect((err) => {
 	if (err) {
