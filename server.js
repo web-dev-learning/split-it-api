@@ -22,19 +22,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.get("/users", (req, res) => {
-	try {
-		db.query("SELECT * FROM users", function(error, results) {
-			if (error) {
-				throw error;
-			}
-			res.json(results);
-		});
-	} catch (err) {
-		console.error(err);
-		res.json("Error: " + err);
-	}
-});
+app.use("/api/users", require("./routes/users"));
 
 app.listen(parseInt(process.env.PORT), () => {
 	console.log(
