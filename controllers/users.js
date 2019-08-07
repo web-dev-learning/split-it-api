@@ -7,13 +7,14 @@ async function createNewUser(req, res) {
 		if (error) {
 			console.error(error);
 			res.statusCode = 400;
-			res.json({
+			return res.json({
 				success: false,
 				message: error.sqlMessage,
 				data: null
 			});
 		}
-		res.json({
+
+		return res.json({
 			success: true,
 			message: "Success.",
 			data: null
