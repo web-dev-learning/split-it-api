@@ -6,10 +6,10 @@ async function login(req, res) {
 	db.query("SELECT * FROM users WHERE email = ?", [email], (error, results, fields) => {
 		if (error) {
 			console.error(error);
-			res.statusCode = 400;
+			res.statusCode = 500;
 			return res.json({
 				success: false,
-				message: error.sqlMessage,
+				message: "Unexpected error occurred.",
 				data: null
 			});
 		}
