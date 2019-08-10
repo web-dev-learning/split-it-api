@@ -28,7 +28,9 @@ CREATE TABLE `users` (
   `email` varchar(200) NOT NULL,
   `password` varchar(200) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_uindex` (`email`),
+  UNIQUE KEY `users_username_uindex` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -38,7 +40,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`) VALUES (1,'test','test@test.test','test','2019-08-06 21:41:08');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`) VALUES (1,'test','test@test.test','$2a$10$oCXkbNZcO3sW41.G7J8yBeiF6DtecoE60dN54e5A140BCEfHnTuJC','2019-08-10 10:27:43');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-06 22:41:20
+-- Dump completed on 2019-08-10 11:29:44
