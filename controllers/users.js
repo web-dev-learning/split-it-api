@@ -1,6 +1,7 @@
 const db = require("../utils/db");
 const {checkRequiredFields, isEmail, isMinLength} = require("../utils/validator");
 const {sanitiseEmail} = require("../utils/sanitiser");
+const {resErr, resSucc} = require("../utils/response");
 
 async function createNewUser(req, res) {
 	let {username, email, password} = req.body;
@@ -8,31 +9,16 @@ async function createNewUser(req, res) {
 	const missingFields = checkRequiredFields(["username", "email", "password"], req.body);
 
 	if (missingFields.length > 0) {
-		res.statusCode = 400;
-		return res.json({
-			success: false,
-			message: `The following required fields are missing: ${missingFields.join(", ")}.`,
-			data: null
-		});
+		return resErr(res, `The following required fields are missing: ${missingFields.join(", ")}.`);
 	}
 
 	if (!isEmail(email)) {
-		res.statusCode = 400;
-		return res.json({
-			success: false,
-			message: "The provided email is not valid.",
-			data: null
-		});
+		return resErr(res, "The provided email is not valid.");
 	}
 
 	const minPasswordLength = 8;
 	if (!isMinLength(password, minPasswordLength)) {
-		res.statusCode = 400;
-		return res.json({
-			success: false,
-			message: `Password must be at least ${minPasswordLength} characters long.`,
-			data: null
-		});
+		return resErr(res, `Password must be at least ${minPasswordLength} characters long.`);
 	}
 
 	email = sanitiseEmail(email);
@@ -40,19 +26,10 @@ async function createNewUser(req, res) {
 	db.query("INSERT INTO users SET ?", {username, email, password}, (error, results, fields) => {
 		if (error) {
 			console.error(error);
-			res.statusCode = 500;
-			return res.json({
-				success: false,
-				message: "Unexpected error occurred.",
-				data: null
-			});
+			return resErr(res, "Unexpected error occurred.", {statusCode: 500});
 		}
 
-		return res.json({
-			success: true,
-			message: "Success.",
-			data: null
-		});
+		return resSucc(res);
 	});
 }
 

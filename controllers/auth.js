@@ -1,7 +1,7 @@
 const db = require("../utils/db");
-
 const {checkRequiredFields} = require("../utils/validator");
 const {sanitiseEmail} = require("../utils/sanitiser");
+const {resErr, resSucc} = require("../utils/response");
 
 async function login(req, res) {
 	let {email, password} = req.body;
@@ -9,12 +9,7 @@ async function login(req, res) {
 	const missingFields = checkRequiredFields(["email", "password"], req.body);
 
 	if (missingFields.length > 0) {
-		res.statusCode = 400;
-		return res.json({
-			success: false,
-			message: `The following required fields are missing: ${missingFields.join(", ")}.`,
-			data: null
-		});
+		return resErr(res, `The following required fields are missing: ${missingFields.join(", ")}.`);
 	}
 
 	email = sanitiseEmail(email);
@@ -22,37 +17,18 @@ async function login(req, res) {
 	db.query("SELECT * FROM users WHERE email = ?", [email], (error, results, fields) => {
 		if (error) {
 			console.error(error);
-			res.statusCode = 500;
-			return res.json({
-				success: false,
-				message: "Unexpected error occurred.",
-				data: null
-			});
+			return resErr(res, "Unexpected error occurred.", {statusCode: 500});
 		}
 
 		if (results.length === 0) {
-			res.statusCode = 400;
-			return res.json({
-				success: false,
-				message: "The provided email does not exist.",
-				data: null
-			});
+			return resErr(res, "The provided email does not exist.");
 		}
 
 		if (results[0].password !== password) {
-			res.statusCode = 400;
-			return res.json({
-				success: false,
-				message: "Wrong password.",
-				data: null
-			});
+			return resErr(res, "Wrong password.");
 		}
 
-		return res.json({
-			success: true,
-			message: "Success.",
-			data: null
-		});
+		return resSucc(res);
 	});
 }
 
