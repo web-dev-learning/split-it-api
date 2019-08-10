@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+
 const db = require("../utils/db");
 const {checkRequiredFields, isEmail, isMinLength} = require("../utils/validator");
 const {sanitiseEmail} = require("../utils/sanitiser");
@@ -21,6 +23,7 @@ async function createNewUser(req, res) {
 		return resErr(res, `Password must be at least ${minPasswordLength} characters long.`);
 	}
 
+	password = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS));
 	email = sanitiseEmail(email);
 
 	db.query("INSERT INTO users SET ?", {username, email, password}, (error, results, fields) => {

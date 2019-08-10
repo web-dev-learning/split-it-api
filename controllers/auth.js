@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+
 const db = require("../utils/db");
 const {checkRequiredFields} = require("../utils/validator");
 const {sanitiseEmail} = require("../utils/sanitiser");
@@ -14,7 +16,7 @@ async function login(req, res) {
 
 	email = sanitiseEmail(email);
 
-	db.query("SELECT * FROM users WHERE email = ?", [email], (error, results, fields) => {
+	db.query("SELECT * FROM users WHERE email = ?", [email], async (error, results, fields) => {
 		if (error) {
 			console.error(error);
 			return resErr(res, "Unexpected error occurred.", {statusCode: 500});
@@ -24,7 +26,9 @@ async function login(req, res) {
 			return resErr(res, "The provided email does not exist.");
 		}
 
-		if (results[0].password !== password) {
+		const passwordsMatch = await bcrypt.compare(password, results[0].password);
+
+		if (!passwordsMatch) {
 			return resErr(res, "Wrong password.");
 		}
 
