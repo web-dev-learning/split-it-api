@@ -18,3 +18,32 @@ const swaggerSpec = swaggerJSDoc(options);
 router.use("/", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 module.exports = router;
+
+/**
+ * @swagger
+ *
+ * components:
+ *   responses:
+ *     Success:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               success:
+ *                 type: boolean
+ *               message:
+ *                 type: string
+ *               data:
+ *                 type:
+ *                   - object
+ *                   - array
+ *                 nullable: true
+ *             required:
+ *               - email
+ *               - password
+ *           example:
+ *             success: true
+ *             message: Success.
+ *             data: null
+ */
