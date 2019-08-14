@@ -13,7 +13,11 @@
 	"homepage": "https://github.com/web-dev-learning/split-it-api#readme",
 	"scripts": {
 		"dev": "nodemon server.js",
-		"start": "node server.js"
+		"start": "node server.js",
+		"lint": "eslint \"**/*.js\"",
+		"lint:fix": "eslint \"**/*.js\" --fix",
+		"format": "prettier --write \"**/*.{js,json}\"",
+		"format:check": "prettier --check \"**/*.{js,json}\""
 	},
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
@@ -28,6 +32,9 @@
 		"validator": "^11.1.0"
 	},
 	"devDependencies": {
+		"eslint": "^6.1.0",
+		"eslint-config-prettier": "^6.0.0",
+		"eslint-plugin-prettier": "^3.1.0",
 		"husky": "^3.0.2",
 		"nodemon": "^1.19.1",
 		"prettier": "^1.18.2",
