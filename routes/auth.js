@@ -8,6 +8,7 @@ const controller = require("../controllers/auth");
  *   post:
  *     tags:
  *       - auth
+ *     summary: Sign in
  *     operationId: login
  *     requestBody:
  *       required: true
@@ -29,6 +30,28 @@ const controller = require("../controllers/auth");
  *     responses:
  *       200:
  *         $ref: '#/components/responses/Success'
+ *       400:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemasHidden/Response'
+ *             examples:
+ *               missingFields:
+ *                 $ref: '#/components/examples/MissingFields'
+ *               wrongEmail:
+ *                 summary: No user with provided email exists
+ *                 value:
+ *                   success: false
+ *                   message: The provided email does not exist.
+ *                   data: null
+ *               wrongPassword:
+ *                 summary: Provided password is wrong
+ *                 value:
+ *                   success: false
+ *                   message: Wrong password.
+ *                   data: null
+ *       500:
+ *         $ref: '#/components/responses/UnexpectedError'
  */
 router.route("/login").post(controller.login);
 
